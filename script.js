@@ -3,41 +3,33 @@ let map;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 2,
-    center: new google.maps.LatLng(0, 0), // 中心位置可以設定為更合適的緯度和經度
+    center: new google.maps.LatLng(2.8, -187.3),
     mapTypeId: "terrain",
   });
 
-  // Fetch earthquake data from the USGS GeoJSON API
-  fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson")
-    .then(response => response.json())
-    .then(data => {
-      displayEarthquakes(data);
-    })
-    .catch(error => console.error("Error fetching earthquake data:", error));
+  // Create a <script> tag and set the USGS URL as the source.
+  const script = document.createElement("script");
+
+  // This example uses a local copy of the GeoJSON stored at
+  // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+  script.src =
+    "https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js";
+  document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-// Loop through the results array and place a marker for each set of coordinates.
-function displayEarthquakes(data) {
-  data.features.forEach(feature => {
-    const coords = feature.geometry.coordinates;
+// Loop through the results array and place a marker for each
+// set of coordinates.
+const eqfeed_callback = function (results) {
+  for (let i = 0; i < results.features.length; i++) {
+    const coords = results.features[i].geometry.coordinates;
     const latLng = new google.maps.LatLng(coords[1], coords[0]);
-    const magnitude = feature.properties.mag;
-    const place = feature.properties.place;
 
-    // Create a marker for each earthquake using AdvancedMarkerElement
-    const marker = new google.maps.marker.AdvancedMarkerElement({
+    new google.maps.Marker({
       position: latLng,
       map: map,
-      content: createMarkerContent(magnitude, place), // Custom content for marker
     });
-  });
-}
-
-// Create custom content for marker
-function createMarkerContent(magnitude, place) {
-  const div = document.createElement('div');
-  div.innerHTML = `<strong>Magnitude: ${magnitude}</strong><br/>Location: ${place}`;
-  return div;
-}
+  }
+};
 
 window.initMap = initMap;
+window.eqfeed_callback = eqfeed_callback;
