@@ -14,6 +14,21 @@
             font-weight: bold;
             color: white;
         }
+        .menu {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .menu a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -21,6 +36,10 @@
 <body>
     <div class="header">
         USGS 地震地圖
+    </div>
+    <div class="menu">
+        <a href="https://www.cwa.gov.tw/V8/C/E/index.html" target="_blank">中央氣象署</a>
+        <a href="https://emsc-csem.org/" target="_blank">EMSC</a>
     </div>
     <div id="map" style="height: 600px;"></div>
     <script>
