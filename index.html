@@ -15,21 +15,46 @@
             color: white;
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <!-- 粉色背景的標題 -->
     <div class="header">
         USGS 地震地圖
     </div>
-    
-    <!-- 這裡是你的地圖和其他內容 -->
-    <div id="map" style="height: 500px;"></div>
-
+    <div id="map" style="height: 600px;"></div>
     <script>
-        // 這裡是載入 USGS 地震資料的腳本
+        // 建立地圖並設置初始視圖
+        var map = L.map('map').setView([20, 0], 2); // 初始位置和縮放層級
+
+        // 添加地圖圖層
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // 載入地震資料
         var script = document.createElement('script');
-        script.src = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp';
+        script.src = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp'; // 使用 HTTPS
         document.getElementsByTagName('head')[0].appendChild(script);
+
+        // 處理返回的資料
+        function eqfeed_callback(data) {
+            // 遍歷地震資料，並在地圖上放置標記
+            data.features.forEach(function(feature) {
+                var coords = feature.geometry.coordinates;
+                var magnitude = feature.properties.mag;
+                var place = feature.properties.place;
+
+                // 在地圖上放置圓形標記
+                L.circle([coords[1], coords[0]], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: magnitude * 10000 // 根據震中強度調整半徑
+                }).addTo(map).bindPopup(place + '<br>Magnitude: ' + magnitude);
+            });
+        }
     </script>
 </body>
 </html>
