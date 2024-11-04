@@ -27,11 +27,11 @@ function displayEarthquakes(data) {
         const magnitude = feature.properties.mag;
         const place = feature.properties.place;
 
-        // Create a marker for each earthquake
-        new google.maps.Marker({
+        // Create a marker for each earthquake using AdvancedMarkerElement
+        const marker = new google.maps.marker.AdvancedMarkerElement({
             position: latLng,
             map: map,
-            title: `Magnitude: ${magnitude}\nLocation: ${place}`,
+            content: createMarkerContent(magnitude, place), // Custom content for marker
         });
 
         // Display earthquake information
@@ -41,4 +41,12 @@ function displayEarthquakes(data) {
     });
 }
 
+// Create custom content for marker
+function createMarkerContent(magnitude, place) {
+    const div = document.createElement('div');
+    div.innerHTML = `<strong>Magnitude: ${magnitude}</strong><br/>Location: ${place}`;
+    return div;
+}
+
 window.initMap = initMap;
+
