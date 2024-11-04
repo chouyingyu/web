@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>地震觀測網頁</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </head>
 <body>
     <h1>地震觀測站</h1>
+    <div id="map" style="height: 500px; width: 100%;"></div>
     <div id="earthquake-data">載入中...</div>
+
     <script src="script.js"></script>
 </body>
 </html>
