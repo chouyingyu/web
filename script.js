@@ -15,3 +15,21 @@ function initMap() {
     })
     .catch(error => console.error("Error fetching earthquake data:", error));
 }
+
+function displayEarthquakes(data) {
+  data.features.forEach(feature => {
+    const coords = feature.geometry.coordinates;
+    const latLng = new google.maps.LatLng(coords[1], coords[0]);
+    const magnitude = feature.properties.mag;
+    const place = feature.properties.place;
+
+    // Create a marker for each earthquake
+    new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: `Magnitude: ${magnitude}\nLocation: ${place}`,
+    });
+  });
+}
+
+window.initMap = initMap;
